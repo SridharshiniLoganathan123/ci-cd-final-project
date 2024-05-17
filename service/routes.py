@@ -1,7 +1,7 @@
 """
 Controller for routes
 """
-from flask import jsonify, url_for, abort
+from flask import jsonify, url_for
 from service import app
 from service.common import status
 
@@ -40,12 +40,7 @@ def list_counters():
     """Lists all counters"""
     app.logger.info("Request to list all counters...")
 
-    counters = [dict(name=count[0], counter=count[1]) for count in COUNTER.items()]
-
     return jsonify({"error": "Not Found"}), 404  # ./service/routes.py:78
-
-
-
 ############################################################
 # Create counters
 ############################################################
@@ -55,10 +50,9 @@ def create_counters(name):
     app.logger.info("Request to Create counter: %s...", name)
 
     if name in COUNTER:
-       return jsonify({"error": "Not Found"}), 404  # ./service/routes.py:78
+        return jsonify({"error": "Not Found"}), 404  # ./service/routes.py:78
 
     COUNTER[name] = 0
-
     location_url = url_for("read_counters", name=name, _external=True)
     return (
         jsonify(name=name, counter=0),
@@ -76,7 +70,7 @@ def read_counters(name):
     app.logger.info("Request to Read counter: %s...", name)
 
     if name not in COUNTER:
-       return jsonify({"error": "Not Found"}), 404  # ./service/routes.py:78
+        return jsonify({"error": "Not Found"}), 404  # ./service/routes.py:78
 
     counter = COUNTER[name]
     return jsonify(name=name, counter=counter)
@@ -92,8 +86,6 @@ def update_counters(name):
 
     if name not in COUNTER:
         return jsonify({"error": "Not Found"}), 404  # ./service/routes.py:78
-
-
     COUNTER[name] += 1
 
     counter = COUNTER[name]
