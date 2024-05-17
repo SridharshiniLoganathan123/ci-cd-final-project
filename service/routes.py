@@ -43,6 +43,8 @@ def list_counters():
     app.logger.info("Request to list all counters...")
 
     return jsonify({"error": "Not Found"}), 404  # ./service/routes.py:78
+
+
 ############################################################
 # Create counters
 ############################################################
