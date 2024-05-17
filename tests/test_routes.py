@@ -35,6 +35,10 @@ class CounterTest(TestCase):
         """ This runs after each test """
         pass
 
+######################################################################
+#  T E S T   C A S E S
+######################################################################
+
     def test_index(self):
         """ It should call the index call """
         resp = self.app.get("/")
@@ -62,18 +66,16 @@ class CounterTest(TestCase):
         data = resp.get_json()
         self.assertEqual(data["name"], name)
         self.assertEqual(data["counter"], 0)
-        # Attempt to create the counter again
         resp = self.app.post(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_409_CONFLICT)
 
     def test_list_counters(self):
         """ It should List counters """
-        # Initially, there should be no counters
         resp = self.app.get("/counters")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
         self.assertEqual(len(data), 0)
-        # Create a counter and make sure it appears in the list
+        # create a counter and name sure it appears in the list
         self.app.post("/counters/foo")
         resp = self.app.get("/counters")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -93,16 +95,15 @@ class CounterTest(TestCase):
     def test_update_counters(self):
         """ It should Update a counter """
         name = "foo"
-        # Create the counter
         resp = self.app.post(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-        # Check its initial state
         resp = self.app.get(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
+        print(data)
         self.assertEqual(data["name"], name)
         self.assertEqual(data["counter"], 0)
-        # Now update it
+        # now update it
         resp = self.app.put(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = resp.get_json()
@@ -112,7 +113,6 @@ class CounterTest(TestCase):
     def test_update_missing_counters(self):
         """ It should not Update a missing counter """
         name = "foo"
-        # Attempt to update a counter that doesn't exist
         resp = self.app.put(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -122,17 +122,11 @@ class CounterTest(TestCase):
         # Create a counter
         resp = self.app.post(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-        # Delete it once
+        # Delete it twice should return the same
         resp = self.app.delete(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
-        # Delete it again, should return the same status
         resp = self.app.delete(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
-        # Get it to make sure it's really gone
+        # Gte it to make sure it's really gone
         resp = self.app.get(f"/counters/{name}")
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-
-
-if __name__ == '__main__':
-    import unittest
-    unittest.main()
