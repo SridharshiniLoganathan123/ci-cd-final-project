@@ -1,3 +1,14 @@
+"""
+Module: error_handlers
+"""
+from flask import jsonify  # Importing jsonify
+from service import app  # Importing app
+from . import status  # Importing status
+
+
+######################################################################
+# Error Handlers
+######################################################################
 @app.errorhandler(status.HTTP_400_BAD_REQUEST)
 def bad_request(error):
     """Handles bad requests with 400_BAD_REQUEST"""
@@ -11,6 +22,7 @@ def bad_request(error):
         ),
         status.HTTP_400_BAD_REQUEST
     )
+
 
 @app.errorhandler(status.HTTP_404_NOT_FOUND)
 def not_found(error):
@@ -26,6 +38,7 @@ def not_found(error):
         status.HTTP_404_NOT_FOUND
     )
 
+
 @app.errorhandler(status.HTTP_405_METHOD_NOT_ALLOWED)
 def method_not_supported(error):
     """Handles unsupported HTTP methods with 405_METHOD_NOT_SUPPORTED"""
@@ -39,6 +52,7 @@ def method_not_supported(error):
         ),
         status.HTTP_405_METHOD_NOT_ALLOWED
     )
+
 
 @app.errorhandler(status.HTTP_409_CONFLICT)
 def resource_conflict(error):
@@ -54,6 +68,7 @@ def resource_conflict(error):
         status.HTTP_409_CONFLICT
     )
 
+
 @app.errorhandler(status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 def mediatype_not_supported(error):
     """Handles unsupported media requests with 415_UNSUPPORTED_MEDIA_TYPE"""
@@ -67,6 +82,7 @@ def mediatype_not_supported(error):
         ),
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE
     )
+
 
 @app.errorhandler(status.HTTP_500_INTERNAL_SERVER_ERROR)
 def internal_server_error(error):
