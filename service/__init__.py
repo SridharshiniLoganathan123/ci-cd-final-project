@@ -6,8 +6,8 @@ from flask import Flask
 app = Flask(__name__)
 
 # This must be imported after the Flask app is created
-from service import routes               
-from service.common import log_handlers  
+from service import routes
+from service.common import log_handlers
 
 log_handlers.init_logging(app, "gunicorn.error")
 
